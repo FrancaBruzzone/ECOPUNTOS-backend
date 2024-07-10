@@ -1,21 +1,32 @@
 {
-  "name": "ecopuntos-backend",
-  "version": "1.0.0",
-  "description": "Este repositorio contiene el código fuente del backend para el sistema ECOPUNTOS",
-  "main": "dist/app.js",
-  "scripts": {
-    "test": "jest",
-    "start": "node dist/app.js",
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FrancaBruzzone/ECOPUNTOS-backend.git"
-  },
-  "author": "Franca Bruzzone y Germán Gil",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/FrancaBruzzone/ECOPUNTOS-backend/issues"
-  },
-  "homepage": "https://github.com/FrancaBruzzone/ECOPUNTOS-backend#readme"
+    "name": "ecopuntos-backend",
+    "version": "1.0.0",
+    "description": "Este repositorio contiene el código fuente del backend para el sistema ECOPUNTOS",
+    "main": "dist/app.js",
+    "scripts": {
+        "test": "jest",
+        "start": "node dist/app.js",
+        "build": "tsc",
+        "check-format": "prettier --check ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/FrancaBruzzone/ECOPUNTOS-backend.git"
+    },
+    "author": "Franca Bruzzone y Germán Gil",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/FrancaBruzzone/ECOPUNTOS-backend/issues"
+    },
+    "homepage": "https://github.com/FrancaBruzzone/ECOPUNTOS-backend#readme",
+    "prettier": {
+        "trailingComma": "all",
+        "tabWidth": 4,
+        "useTabs": false,
+        "semi": true,
+        "singleQuote": true
+    },
+    "dependencies": {
+        "prettier": "^3.3.2"
+    }
 }
