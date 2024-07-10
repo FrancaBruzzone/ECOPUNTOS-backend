@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/FrancaBruzzone/ECOPUNTOS-backend/issues"
   },
-  "homepage": "https://github.com/FrancaBruzzone/ECOPUNTOS-backend#readme"
+  "homepage": "https://github.com/FrancaBruzzone/ECOPUNTOS-backend#readme",
+  "dependencies": {
+    "prettier": "^3.3.2"
+  }
 }
