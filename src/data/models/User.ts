@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { getSequelizeInstance } from '../config/sequelize';
 import { Gender } from './enumerations/Gender';
+import bcrypt from 'bcrypt';
 
 class User extends Model {
     public id!: number;
@@ -20,6 +21,10 @@ class User extends Model {
     get availablePoints(): number {
         // Lógica para calcular los puntos disponibles
         return 0;
+    }
+
+    public async comparePassword(candidatePassword: string): Promise<boolean> {
+        return bcrypt.compare(candidatePassword, this.password);
     }
 }
 
@@ -70,6 +75,14 @@ User.init(
         modelName: 'User',
         tableName: 'users',
         timestamps: true,
+        hooks: {
+            beforeSave: async (user: User) => {
+                if (user.changed('password')) {
+                    const salt = await bcrypt.genSalt(10);
+                    user.password = await bcrypt.hash(user.password, salt);
+                }
+            },
+        },
     },
 );
 
