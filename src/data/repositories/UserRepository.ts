@@ -1,4 +1,4 @@
-import { Attributes, Model, ModelCtor, WhereOptions } from 'sequelize';
+import { Attributes, WhereOptions } from 'sequelize';
 import { injectable } from 'tsyringe';
 import User from '../models/User';
 import { IUserRepository } from '../../interfaces/IUserRepository';

@@ -20,6 +20,13 @@ Role.init(
         name: {
             type: DataTypes.STRING,
             allowNull: false,
+            set(value: string) {
+                this.setDataValue('name', value.toUpperCase());
+            },
+            get() {
+                const name = this.getDataValue('name');
+                return name ? name.toUpperCase() : '';
+            },
         },
     },
     {
