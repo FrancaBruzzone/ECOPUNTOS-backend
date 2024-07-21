@@ -36,7 +36,7 @@ export class RoleService implements IRoleService {
         const existingRole = await this.roleRepository.findById(id);
 
         if (!existingRole)
-            throw new NotFoundError(`El rol con ID ${id} no existe`);
+            throw new NotFoundError(`El rol con Id ${id} no existe`);
 
         return await this.roleRepository.delete(id);
     }

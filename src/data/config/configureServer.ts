@@ -7,8 +7,10 @@ import { MySqlConnection } from './MySqlConnection';
 import { IUserService } from '../../interfaces/IUserService';
 import userRoutes from '../../api/routes/UserRoutes';
 import roleRoutes from '../../api/routes/RoleRoutes';
+import companyRoutes from '../../api/routes/CompanyRoutes';
 import { errorHandler } from '../../middlewares/errorHandler';
 import { IRoleService } from '../../interfaces/IRoleService';
+import { ICompanyService } from '../../interfaces/ICompanyService';
 
 dotenv.config();
 
@@ -45,6 +47,11 @@ export const configureServer = async function () {
     const roleService = container.resolve<IRoleService>('IRoleService');
     app.set('roleService', roleService);
     app.use('/api', roleRoutes);
+
+    const companyService =
+        container.resolve<ICompanyService>('ICompanyService');
+    app.set('companyService', companyService);
+    app.use('/api', companyRoutes);
 
     app.use(errorHandler);
 
