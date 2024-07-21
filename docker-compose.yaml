@@ -1,0 +1,20 @@
+services:
+    mysql:
+        image: mysql:8
+        volumes:
+            - mysql_ecopuntos:/var/lib/mysql
+        networks:
+            - ecopuntos-network
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            PORT: 3306
+        restart: on-failure
+
+volumes:
+    mysql_ecopuntos:
+
+networks:
+    ecopuntos-network:
+        name: ecopuntos-network
