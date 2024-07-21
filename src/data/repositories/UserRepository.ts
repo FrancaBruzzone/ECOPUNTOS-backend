@@ -22,8 +22,8 @@ export class UserRepository implements IUserRepository {
         return user;
     }
 
-    public async update(id: number, entity: Partial<User>): Promise<boolean> {
-        const result = await User.update(entity, {
+    public async update(id: number, user: Partial<User>): Promise<boolean> {
+        const result = await User.update(user, {
             where: { id } as any,
         });
         return result[0] > 0;

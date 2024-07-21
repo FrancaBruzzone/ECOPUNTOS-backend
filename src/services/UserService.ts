@@ -11,7 +11,7 @@ export class UserService implements IUserService {
         private userRepository: IUserRepository,
     ) {}
 
-    public async createUser(user: User): Promise<User> {
+    public async create(user: User): Promise<User> {
         const existingAccount = await this.userRepository.findByEmail(
             user.email,
         );
