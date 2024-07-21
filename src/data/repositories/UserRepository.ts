@@ -1,27 +1,21 @@
-import { IRepository } from '../../interfaces/IRepository';
 import { Attributes, Model, ModelCtor, WhereOptions } from 'sequelize';
 import { injectable } from 'tsyringe';
+import User from '../models/User';
+import { IUserRepository } from '../../interfaces/IUserRepository';
 
 @injectable()
-export class Repository<T extends Model> implements IRepository<T> {
-    private model: ModelCtor<T>;
-
-    constructor(model: ModelCtor<T>) {
-        this.model = model;
-    }
-
-    public async create(entity: T): Promise<T> {
+export class UserRepository implements IUserRepository {
+    public async create(entity: User): Promise<void> {
         try {
-            console.log(entity);
-            return await this.model.create(entity as any);
+            await User.create(entity as any);
         } catch (error: any) {
             throw new Error(`Error al agregar la entidad: ${error.message}`);
         }
     }
 
-    public async findById(id: number): Promise<T | null> {
+    public async findById(id: number): Promise<User | null> {
         try {
-            const entity = await this.model.findByPk(id);
+            const entity = await User.findByPk(id);
             return entity;
         } catch (error: any) {
             throw new Error(
@@ -30,9 +24,9 @@ export class Repository<T extends Model> implements IRepository<T> {
         }
     }
 
-    public async update(id: number, entity: Partial<T>): Promise<boolean> {
+    public async update(id: number, entity: Partial<User>): Promise<boolean> {
         try {
-            const result = await this.model.update(entity, {
+            const result = await User.update(entity, {
                 where: { id } as any,
             });
             return result[0] > 0;
@@ -43,19 +37,19 @@ export class Repository<T extends Model> implements IRepository<T> {
 
     public async delete(id: number): Promise<boolean> {
         try {
-            const whereOptions: WhereOptions<Attributes<T>> = {
+            const whereOptions: WhereOptions<Attributes<User>> = {
                 where: { id } as any,
             };
-            const result = await this.model.destroy(whereOptions);
+            const result = await User.destroy(whereOptions);
             return result > 0;
         } catch (error: any) {
             throw new Error(`Error al eliminar la entidad: ${error.message}`);
         }
     }
 
-    public async getAll(): Promise<T[]> {
+    public async getAll(): Promise<User[]> {
         try {
-            const entities = await this.model.findAll();
+            const entities = await User.findAll();
             return entities;
         } catch (error: any) {
             throw new Error(
