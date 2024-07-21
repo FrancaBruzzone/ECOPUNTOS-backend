@@ -9,13 +9,13 @@ class RoleController {
         this.roleService = roleService;
     }
 
-    public async createRole(req: Request, res: Response): Promise<void> {
+    public async create(req: Request, res: Response): Promise<void> {
         const { name } = req.body;
         const roleToCreate = Role.build({
             name,
         });
 
-        const newRole = await this.roleService.createRole(roleToCreate);
+        const newRole = await this.roleService.create(roleToCreate);
 
         res.status(201).json({
             message: 'Rol creado con éxito',
@@ -23,9 +23,9 @@ class RoleController {
         });
     }
 
-    public async getRole(req: Request, res: Response): Promise<void> {
+    public async get(req: Request, res: Response): Promise<void> {
         let id = parseInt(req.params.id, 10);
-        const role = await this.roleService.getRole(id);
+        const role = await this.roleService.get(id);
 
         res.status(200).json({
             message: 'Lectura de rol realizada con éxito',
@@ -33,9 +33,9 @@ class RoleController {
         });
     }
 
-    public async deleteRole(req: Request, res: Response): Promise<void> {
+    public async delete(req: Request, res: Response): Promise<void> {
         let id = parseInt(req.params.id, 10);
-        const roleWasDeleted = await this.roleService.deleteRole(id);
+        const roleWasDeleted = await this.roleService.delete(id);
 
         if (roleWasDeleted)
             res.status(200).json({
@@ -43,8 +43,8 @@ class RoleController {
             });
     }
 
-    public async getRoles(req: Request, res: Response): Promise<void> {
-        const roles = await this.roleService.getRoles();
+    public async getAll(req: Request, res: Response): Promise<void> {
+        const roles = await this.roleService.getAll();
 
         res.status(200).json({
             message: 'Lectura de roles realizada con éxito',
