@@ -10,25 +10,18 @@ class UserController {
     }
 
     public async createUser(req: Request, res: Response): Promise<void> {
-        try {
-            const { email, password } = req.body;
-            const userToCreate = User.build({
-                email,
-                password,
-            });
+        const { email, password } = req.body;
+        const userToCreate = User.build({
+            email,
+            password,
+        });
 
-            const newUser = await this.userService.createUser(userToCreate);
+        const newUser = await this.userService.createUser(userToCreate);
 
-            res.status(201).json({
-                message: 'Usuario creado con éxito',
-                account: newUser,
-            });
-        } catch (error: any) {
-            res.status(500).json({
-                message: 'Error al crear usuario',
-                error: error.message,
-            });
-        }
+        res.status(201).json({
+            message: 'Usuario creado con éxito',
+            account: newUser,
+        });
     }
 }
 

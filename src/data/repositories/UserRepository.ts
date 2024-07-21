@@ -5,56 +5,40 @@ import { IUserRepository } from '../../interfaces/IUserRepository';
 
 @injectable()
 export class UserRepository implements IUserRepository {
-    public async create(entity: User): Promise<void> {
-        try {
-            await User.create(entity as any);
-        } catch (error: any) {
-            throw new Error(`Error al agregar la entidad: ${error.message}`);
-        }
+    public async create(user: User): Promise<User> {
+        return await User.create({
+            email: user.email,
+            password: user.password,
+        });
     }
 
     public async findById(id: number): Promise<User | null> {
-        try {
-            const entity = await User.findByPk(id);
-            return entity;
-        } catch (error: any) {
-            throw new Error(
-                `Error al obtener la entidad por ID: ${error.message}`,
-            );
-        }
+        const entity = await User.findByPk(id);
+        return entity;
+    }
+
+    public async findByEmail(email: string): Promise<User | null> {
+        const user = await User.findOne({ where: { email } });
+        return user;
     }
 
     public async update(id: number, entity: Partial<User>): Promise<boolean> {
-        try {
-            const result = await User.update(entity, {
-                where: { id } as any,
-            });
-            return result[0] > 0;
-        } catch (error: any) {
-            throw new Error(`Error al actualizar la entidad: ${error.message}`);
-        }
+        const result = await User.update(entity, {
+            where: { id } as any,
+        });
+        return result[0] > 0;
     }
 
     public async delete(id: number): Promise<boolean> {
-        try {
-            const whereOptions: WhereOptions<Attributes<User>> = {
-                where: { id } as any,
-            };
-            const result = await User.destroy(whereOptions);
-            return result > 0;
-        } catch (error: any) {
-            throw new Error(`Error al eliminar la entidad: ${error.message}`);
-        }
+        const whereOptions: WhereOptions<Attributes<User>> = {
+            where: { id } as any,
+        };
+        const result = await User.destroy(whereOptions);
+        return result > 0;
     }
 
     public async getAll(): Promise<User[]> {
-        try {
-            const entities = await User.findAll();
-            return entities;
-        } catch (error: any) {
-            throw new Error(
-                `Error al obtener todas las entidades: ${error.message}`,
-            );
-        }
+        const entities = await User.findAll();
+        return entities;
     }
 }
