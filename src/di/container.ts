@@ -10,6 +10,8 @@ import { SettingRepository } from '../data/repositories/SettingRepository';
 import { RoleRepository } from '../data/repositories/RoleRepository';
 import { PointsBalanceRepository } from '../data/repositories/PointsBalanceRepository';
 import { OfferRepository } from '../data/repositories/OfferRepository';
+import { IUserService } from '../interfaces/IUserService';
+import { UserService } from '../services/UserService';
 
 container.register('IActivityTypeRepository', {
     useClass: ActivityTypeRepository,
@@ -49,6 +51,9 @@ container.register('ISettingRepository', {
 
 container.register('IUserRepository', {
     useClass: UserRepository,
+});
+container.register<IUserService>('IUserService', {
+    useClass: UserService,
 });
 
 container.register('IUserSessionRepository', {

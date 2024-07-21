@@ -1,8 +1,11 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import container from '../../di/container';
 import { synchronizeModels } from './synchronizeModels';
 import { MySqlConnection } from './MySqlConnection';
+import { IUserService } from '../../interfaces/IUserService';
+import userRoutes from '../../api/routes/UserRoutes';
 
 dotenv.config();
 
@@ -31,6 +34,10 @@ export const configureServer = async function () {
         });
 
     await synchronizeModels();
+
+    const userService = container.resolve<IUserService>('IUserService');
+    app.set('userService', userService);
+    app.use('/api', userRoutes);
 
     return app;
 };

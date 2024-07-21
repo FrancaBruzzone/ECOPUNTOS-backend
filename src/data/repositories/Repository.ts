@@ -10,9 +10,10 @@ export class Repository<T extends Model> implements IRepository<T> {
         this.model = model;
     }
 
-    public async create(entity: T): Promise<void> {
+    public async create(entity: T): Promise<T> {
         try {
-            await this.model.create(entity as any);
+            console.log(entity);
+            return await this.model.create(entity as any);
         } catch (error: any) {
             throw new Error(`Error al agregar la entidad: ${error.message}`);
         }
