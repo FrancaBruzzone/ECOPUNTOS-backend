@@ -44,7 +44,7 @@ Document.init(
             type: DataTypes.INTEGER,
             allowNull: true,
             references: {
-                model: 'sustainabilityActivities',
+                model: 'sustainabilityactivities',
                 key: 'id',
             },
         },

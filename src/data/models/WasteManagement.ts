@@ -21,7 +21,7 @@ WasteManagement.init(
             allowNull: false,
             unique: true,
             references: {
-                model: 'activityTypes',
+                model: 'activitytypes',
                 key: 'id',
             },
         },
