@@ -13,8 +13,8 @@ export class RoleRepository implements IRoleRepository {
     }
 
     public async findById(id: number): Promise<Role | null> {
-        const entity = await Role.findByPk(id);
-        return entity;
+        const role = await Role.findByPk(id);
+        return role;
     }
 
     public async findByName(name: string): Promise<Role | null> {
@@ -31,7 +31,7 @@ export class RoleRepository implements IRoleRepository {
     }
 
     public async getAll(): Promise<Role[]> {
-        const entities = await Role.findAll();
-        return entities;
+        const roles = await Role.findAll();
+        return roles;
     }
 }

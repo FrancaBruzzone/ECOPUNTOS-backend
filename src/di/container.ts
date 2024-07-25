@@ -8,6 +8,7 @@ import { RoleService } from '../services/RoleService';
 import { CompanyRepository } from '../data/repositories/CompanyRepository';
 import { ICompanyService } from '../interfaces/ICompanyService';
 import { CompanyService } from '../services/CompanyService';
+import { UserSessionRepository } from '../data/repositories/UserSessionRepository';
 
 container.register('IUserRepository', {
     useClass: UserRepository,
@@ -31,6 +32,10 @@ container.register('ICompanyRepository', {
 
 container.register<ICompanyService>('ICompanyService', {
     useClass: CompanyService,
+});
+
+container.register('IUserSessionRepository', {
+    useClass: UserSessionRepository,
 });
 
 export default container;

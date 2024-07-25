@@ -19,7 +19,7 @@ class RoleController {
 
         res.status(201).json({
             message: 'Rol creado con éxito',
-            role: newRole,
+            data: newRole,
         });
     }
 
@@ -29,7 +29,7 @@ class RoleController {
 
         res.status(200).json({
             message: 'Lectura de rol realizada con éxito',
-            role: role,
+            data: role,
         });
     }
 
@@ -48,7 +48,7 @@ class RoleController {
 
         res.status(200).json({
             message: 'Lectura de roles realizada con éxito',
-            role: roles,
+            data: roles,
         });
     }
 }
