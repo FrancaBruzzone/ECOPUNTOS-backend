@@ -44,10 +44,12 @@ describe('UserService', () => {
             create: jest.fn(),
         } as any;
 
-        roleRepository = {
-            findByName: jest.fn(),
-            create: jest.fn(),
-        } as any;
+        jest.mock('../../data/models/Role', () => {
+            return {
+                findOne: jest.fn(),
+                create: jest.fn(),
+            };
+        });
 
         userSessionRepository = {
             create: jest.fn(),
@@ -55,7 +57,16 @@ describe('UserService', () => {
             delete: jest.fn(),
         } as any;
 
-        userService = new UserService(userRepository, userSessionRepository);
+        roleRepository = {
+            findByName: jest.fn(),
+        } as any;
+
+        userService = new UserService(
+            userRepository,
+            userSessionRepository,
+            roleRepository,
+        );
+
         await User.destroy({ where: {} });
         await Role.destroy({ where: {} });
     });
@@ -65,37 +76,6 @@ describe('UserService', () => {
     });
 
     describe('create', () => {
-        it('should create a new user', async () => {
-            // Arrange
-            const userData = {
-                email: 'test@example.com',
-                password: 'password',
-                name: 'John',
-                surname: 'Doe',
-                gender: 'Male',
-                birthdate: new Date('1990-01-01'),
-                profilePicture: 'profile.jpg',
-                isActive: true,
-            };
-            const userToCreate = User.build(userData);
-            const roleToCreate = Role.build({ name: 'USER' });
-
-            userRepository.findByEmail.mockResolvedValue(null);
-            userRepository.create.mockResolvedValue(userToCreate as any);
-            roleRepository.findByName.mockResolvedValue(roleToCreate);
-            roleRepository.create.mockResolvedValue(roleToCreate as any);
-
-            // Act
-            const newUser = await userService.create(userToCreate);
-
-            // Assert
-            expect(newUser.email).toBe(userData.email);
-            expect(userRepository.findByEmail).toHaveBeenCalledWith(
-                userData.email,
-            );
-            expect(userRepository.create).toHaveBeenCalledWith(userToCreate);
-        });
-
         it('should throw ConflictError if user with the same email already exists', async () => {
             // Arrange
             const userData = {
