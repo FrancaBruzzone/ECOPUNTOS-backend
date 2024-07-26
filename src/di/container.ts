@@ -6,6 +6,9 @@ import { CompanyRepository } from '../data/repositories/CompanyRepository';
 import { ICompanyService } from '../interfaces/ICompanyService';
 import { CompanyService } from '../services/CompanyService';
 import { UserSessionRepository } from '../data/repositories/UserSessionRepository';
+import { OfferRepository } from '../data/repositories/OfferRepository';
+import { IOfferService } from '../interfaces/IOfferService';
+import { OfferService } from '../services/OfferService';
 
 container.register('IUserRepository', {
     useClass: UserRepository,
@@ -25,6 +28,14 @@ container.register<ICompanyService>('ICompanyService', {
 
 container.register('IUserSessionRepository', {
     useClass: UserSessionRepository,
+});
+
+container.register('IOfferRepository', {
+    useClass: OfferRepository,
+});
+
+container.register<IOfferService>('IOfferService', {
+    useClass: OfferService,
 });
 
 export default container;

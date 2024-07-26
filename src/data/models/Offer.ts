@@ -18,11 +18,11 @@ class Offer extends Model {
     public id!: number;
 
     @Column({
-        type: DataType.INTEGER,
+        type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    public code!: number;
+    public code!: string;
 
     @Column({
         type: DataType.STRING,
@@ -45,20 +45,22 @@ class Offer extends Model {
     @Column({
         type: DataType.DECIMAL(10, 2),
         allowNull: false,
+        defaultValue: 0,
     })
     public amount!: number;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
+        defaultValue: 0,
     })
     public minPointsRequired!: number;
 
     @Column({
         type: DataType.INTEGER,
-        allowNull: false,
+        allowNull: true,
     })
-    public maxPointsRequired!: number;
+    public maxPointsRequired?: number;
 
     @Column({
         type: DataType.STRING,
@@ -69,27 +71,30 @@ class Offer extends Model {
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
+        defaultValue: true,
     })
     public isActive!: boolean;
 
     @Column({
         type: DataType.BOOLEAN,
         allowNull: false,
+        defaultValue: true,
     })
     public allowsCancelExchange!: boolean;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
+        defaultValue: 0,
     })
     public exchangeCompletedCount!: number;
 
     @ForeignKey(() => Company)
     @Column({
         type: DataType.INTEGER,
-        allowNull: false,
+        allowNull: true,
     })
-    public companyId!: number;
+    public companyId?: number;
 
     @ForeignKey(() => User)
     @Column({
