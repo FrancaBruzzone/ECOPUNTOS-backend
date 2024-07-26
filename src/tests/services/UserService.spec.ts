@@ -3,17 +3,13 @@ import { Sequelize } from 'sequelize';
 import User from '../../data/models/User';
 import { getSequelizeInstance } from '../../data/config/sequelize';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
 import { UserService } from '../../services/UserService';
 import { IUserRepository } from '../../interfaces/IUserRepository';
 import { IUserSessionRepository } from '../../interfaces/IUserSessionRepository';
 import { ConflictError } from '../../exceptions/ConflictError';
 import { InvalidCredentialsError } from '../../exceptions/InvalidCredentialsError';
 import { NotFoundError } from '../../exceptions/NotFoundError';
-import UserSession from '../../data/models/UserSession';
 import { jest } from '@jest/globals';
-import Role from '../../data/models/Role';
-import { IRoleRepository } from '../../interfaces/IRoleRepository';
 
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
@@ -30,7 +26,6 @@ describe('UserService', () => {
     let sequelize: Sequelize;
     let userService: UserService;
     let userRepository: jest.Mocked<IUserRepository>;
-    let roleRepository: jest.Mocked<IRoleRepository>;
     let userSessionRepository: jest.Mocked<IUserSessionRepository>;
 
     beforeAll(async () => {
@@ -57,18 +52,9 @@ describe('UserService', () => {
             delete: jest.fn(),
         } as any;
 
-        roleRepository = {
-            findByName: jest.fn(),
-        } as any;
-
-        userService = new UserService(
-            userRepository,
-            userSessionRepository,
-            roleRepository,
-        );
+        userService = new UserService(userRepository, userSessionRepository);
 
         await User.destroy({ where: {} });
-        await Role.destroy({ where: {} });
     });
 
     afterAll(async () => {

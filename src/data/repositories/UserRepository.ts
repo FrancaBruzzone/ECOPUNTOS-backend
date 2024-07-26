@@ -12,6 +12,7 @@ export class UserRepository implements IUserRepository {
         return await User.create({
             email: user.email,
             password: user.password,
+            roles: user.roles,
         });
     }
 

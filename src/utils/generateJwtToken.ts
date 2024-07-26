@@ -6,14 +6,12 @@ export async function generateJwtToken(
     user: User,
     userSession: UserSession,
 ): Promise<string> {
-    const roles = await user.$get('roles');
-
     const payload = {
         userId: user.id,
         userEmail: user.email,
         userSessionId: userSession.sessionId,
-        userRolesNames: Array.isArray(roles)
-            ? roles.map((role) => role.name)
+        userRolesNames: Array.isArray(user.roles)
+            ? user.roles.map((role) => role)
             : [],
         userPointsBalancesIds: Array.isArray(user.pointsBalances)
             ? user.pointsBalances.map((balance) => balance.id)

@@ -6,9 +6,9 @@ import {
     BelongsToMany,
     HasOne,
     BeforeSave,
+    DataType,
 } from 'sequelize-typescript';
 import PointsBalance from './PointsBalance';
-import Role from './Role';
 import Exchange from './Exchange';
 import UserSession from './UserSession';
 import Offer from './Offer';
@@ -16,8 +16,8 @@ import SustainabilityActivity from './SustainabilityActivity';
 import Setting from './Setting';
 import Company from './Company';
 import bcrypt from 'bcrypt';
-import UserRole from './UserRole';
 import UserCompany from './UserCompany';
+import { Role } from './enumerations/Role';
 
 @Table({ tableName: 'users', timestamps: true })
 class User extends Model {
@@ -48,7 +48,17 @@ class User extends Model {
     @HasMany(() => PointsBalance)
     pointsBalances!: PointsBalance[];
 
-    @BelongsToMany(() => Role, () => UserRole)
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        get() {
+            const roles = this.getDataValue('roles');
+            return roles ? roles.split(',') : [];
+        },
+        set(value: Role[]) {
+            this.setDataValue('roles', value.join(','));
+        },
+    })
     roles!: Role[];
 
     @HasMany(() => Exchange)

@@ -9,11 +9,10 @@ import { NotFoundError } from '../exceptions/NotFoundError';
 import { InvalidCredentialsError } from '../exceptions/InvalidCredentialsError';
 import { IUserSessionRepository } from '../interfaces/IUserSessionRepository';
 import { getSequelizeInstance } from '../data/config/sequelize';
-import { IRoleRepository } from '../interfaces/IRoleRepository';
 import { ITokenPayload } from '../interfaces/ITokenPayload';
 import { generateJwtToken } from '../utils/generateJwtToken';
-
-const roleUser = 'USER';
+import { Role } from '../data/models/enumerations/Role';
+import { addRoleToUser } from '../utils/roleUtils';
 
 @injectable()
 export class UserService implements IUserService {
@@ -22,8 +21,6 @@ export class UserService implements IUserService {
         private userRepository: IUserRepository,
         @inject('IUserSessionRepository')
         private userSessionRepository: IUserSessionRepository,
-        @inject('IRoleRepository')
-        private roleRepository: IRoleRepository,
     ) {}
 
     public async create(user: User): Promise<User> {
@@ -34,24 +31,15 @@ export class UserService implements IUserService {
                 user.email,
             );
 
-            if (existingAccount) {
+            if (existingAccount)
                 throw new ConflictError(`El email ${user.email} ya existe`);
-            }
 
-            const role = await this.roleRepository.findByName(roleUser);
-
-            if (!role)
-                throw new NotFoundError(
-                    `El rol con nombre ${roleUser} no existe`,
-                );
-
+            user.roles = addRoleToUser(user.roles, Role.User);
             const createdUser = await this.userRepository.create(user, {
                 transaction,
             });
 
-            await createdUser.$set('roles', [role.id], { transaction });
             await transaction.commit();
-
             return createdUser;
         } catch (error) {
             await transaction.rollback();

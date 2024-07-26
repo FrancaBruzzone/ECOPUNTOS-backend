@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import User from '../models/User';
 import PointsBalance from '../models/PointsBalance';
 import Exchange from '../models/Exchange';
-import Role from '../models/Role';
 import Offer from '../models/Offer';
 import Company from '../models/Company';
 import Investment from '../models/Investment';
@@ -14,7 +13,6 @@ import Document from '../models/Document';
 import ActivityType from '../models/ActivityType';
 import Transport from '../models/Transport';
 import WasteManagement from '../models/WasteManagement';
-import UserRole from '../models/UserRole';
 import UserCompany from '../models/UserCompany';
 
 dotenv.config();
@@ -36,7 +34,6 @@ export const getSequelizeInstance = (): Sequelize => {
                     User,
                     PointsBalance,
                     Exchange,
-                    Role,
                     Offer,
                     Company,
                     Investment,
@@ -47,7 +44,6 @@ export const getSequelizeInstance = (): Sequelize => {
                     ActivityType,
                     Transport,
                     WasteManagement,
-                    UserRole,
                     UserCompany,
                 ],
                 logging: console.log,
@@ -61,7 +57,6 @@ export const getSequelizeInstance = (): Sequelize => {
                     User,
                     PointsBalance,
                     Exchange,
-                    Role,
                     Offer,
                     Company,
                     Investment,
@@ -72,7 +67,6 @@ export const getSequelizeInstance = (): Sequelize => {
                     ActivityType,
                     Transport,
                     WasteManagement,
-                    UserRole,
                     UserCompany,
                 ],
                 logging: false,
