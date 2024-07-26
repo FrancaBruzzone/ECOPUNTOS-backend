@@ -11,6 +11,8 @@ import { IUserSessionRepository } from '../interfaces/IUserSessionRepository';
 import { getSequelizeInstance } from '../data/config/sequelize';
 import { IRoleRepository } from '../interfaces/IRoleRepository';
 
+const roleUser = 'USER';
+
 interface TokenPayload {
     id: number;
     email: string;
@@ -40,11 +42,11 @@ export class UserService implements IUserService {
                 throw new ConflictError(`El email ${user.email} ya existe`);
             }
 
-            const role = await this.roleRepository.findByName('USER');
+            const role = await this.roleRepository.findByName(roleUser);
 
             if (!role)
                 throw new NotFoundError(
-                    'El rol "User" no se encuentra en la base de datos',
+                    `El rol con nombre ${roleUser} no existe`,
                 );
 
             const createdUser = await this.userRepository.create(user, {
