@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ConflictError } from '../exceptions/ConflictError';
+import instance from 'tsyringe/dist/typings/dependency-container';
+import { NotFoundError } from '../exceptions/NotFoundError';
 
 function messageFormat(error: Error) {
     let errorMessage = { message: error.message };
@@ -15,9 +17,8 @@ export function errorHandler(
 ) {
     let message = messageFormat(error);
 
-    if (error instanceof ConflictError) {
-        return res.status(409).json(message);
-    } else {
-        return res.status(500).json('Error interno de servidor');
-    }
+    if (error instanceof ConflictError) return res.status(409).json(message);
+    else if (error instanceof NotFoundError)
+        return res.status(400).json(message);
+    else return res.status(500).json('Error interno de servidor');
 }

@@ -6,7 +6,9 @@ import { synchronizeModels } from './synchronizeModels';
 import { MySqlConnection } from './MySqlConnection';
 import { IUserService } from '../../interfaces/IUserService';
 import userRoutes from '../../api/routes/UserRoutes';
+import roleRoutes from '../../api/routes/RoleRoutes';
 import { errorHandler } from '../../middlewares/errorHandler';
+import { IRoleService } from '../../interfaces/IRoleService';
 
 dotenv.config();
 
@@ -39,6 +41,10 @@ export const configureServer = async function () {
     const userService = container.resolve<IUserService>('IUserService');
     app.set('userService', userService);
     app.use('/api', userRoutes);
+
+    const roleService = container.resolve<IRoleService>('IRoleService');
+    app.set('roleService', roleService);
+    app.use('/api', roleRoutes);
 
     app.use(errorHandler);
 

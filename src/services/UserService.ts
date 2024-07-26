@@ -16,7 +16,8 @@ export class UserService implements IUserService {
             user.email,
         );
 
-        if (existingAccount) throw new ConflictError('El email ya existe');
+        if (existingAccount)
+            throw new ConflictError(`El email ${user.email} ya existe`);
 
         return await this.userRepository.create(user);
     }
