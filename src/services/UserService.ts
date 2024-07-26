@@ -8,6 +8,8 @@ import { ConflictError } from '../exceptions/ConflictError';
 import { NotFoundError } from '../exceptions/NotFoundError';
 import { InvalidCredentialsError } from '../exceptions/InvalidCredentialsError';
 import { IUserSessionRepository } from '../interfaces/IUserSessionRepository';
+import Role from '../data/models/Role';
+import { getSequelizeInstance } from '../data/config/sequelize';
 
 interface TokenPayload {
     id: number;
@@ -25,14 +27,39 @@ export class UserService implements IUserService {
     ) {}
 
     public async create(user: User): Promise<User> {
-        const existingAccount = await this.userRepository.findByEmail(
-            user.email,
-        );
+        const transaction = await getSequelizeInstance().transaction();
 
-        if (existingAccount)
-            throw new ConflictError(`El email ${user.email} ya existe`);
+        try {
+            const existingAccount = await this.userRepository.findByEmail(
+                user.email,
+            );
 
-        return await this.userRepository.create(user);
+            if (existingAccount) {
+                throw new ConflictError(`El email ${user.email} ya existe`);
+            }
+
+            const userRole = await Role.findOne({
+                where: { name: 'USER' },
+                transaction,
+            });
+
+            if (!userRole)
+                throw new NotFoundError(
+                    'El rol "User" no se encuentra en la base de datos',
+                );
+
+            const createdUser = await this.userRepository.create(user, {
+                transaction,
+            });
+
+            await createdUser.$set('roles', [userRole.id], { transaction });
+            await transaction.commit();
+
+            return createdUser;
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
     }
 
     public async login(email: string, password: string): Promise<string> {

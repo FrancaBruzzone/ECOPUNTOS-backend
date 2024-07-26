@@ -1,40 +1,27 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import { Table, Column, Model } from 'sequelize-typescript';
+import { DataType } from 'sequelize-typescript';
 
+@Table({ tableName: 'roles', timestamps: false })
 class Role extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        set(value: string) {
+            this.setDataValue('name', value.toUpperCase());
+        },
+        get() {
+            const name = this.getDataValue('name');
+            return name ? name.toUpperCase() : '';
+        },
+    })
     public name!: string;
-
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
 }
-
-Role.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            set(value: string) {
-                this.setDataValue('name', value.toUpperCase());
-            },
-            get() {
-                const name = this.getDataValue('name');
-                return name ? name.toUpperCase() : '';
-            },
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'Role',
-        tableName: 'roles',
-        timestamps: false,
-    },
-);
 
 export default Role;

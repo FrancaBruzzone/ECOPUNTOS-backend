@@ -1,11 +1,14 @@
-import { Attributes, WhereOptions } from 'sequelize';
+import { Attributes, Transaction, WhereOptions } from 'sequelize';
 import { injectable } from 'tsyringe';
 import User from '../models/User';
 import { IUserRepository } from '../../interfaces/IUserRepository';
 
 @injectable()
 export class UserRepository implements IUserRepository {
-    public async create(user: User): Promise<User> {
+    public async create(
+        user: User,
+        options: { transaction?: Transaction } = {},
+    ): Promise<User> {
         return await User.create({
             email: user.email,
             password: user.password,

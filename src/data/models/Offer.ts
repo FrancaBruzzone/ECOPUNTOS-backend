@@ -1,95 +1,105 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    ForeignKey,
+    DataType,
+} from 'sequelize-typescript';
+import Company from './Company';
+import User from './User';
 
+@Table({ tableName: 'offers', timestamps: true })
 class Offer extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+        unique: true,
+    })
     public code!: number;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     public name!: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     public description!: string;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: true,
+    })
     public stock?: number;
+
+    @Column({
+        type: DataType.DECIMAL(10, 2),
+        allowNull: false,
+    })
     public amount!: number;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public minPointsRequired!: number;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public maxPointsRequired!: number;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
     public productPicture?: string;
-    public isActive?: boolean;
+
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: false,
+    })
+    public isActive!: boolean;
+
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: false,
+    })
     public allowsCancelExchange!: boolean;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public exchangeCompletedCount!: number;
 
-    // Relaciones entre entidades
+    @ForeignKey(() => Company)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public companyId!: number;
 
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
-}
+    @ForeignKey(() => User)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
+    public userId!: number;
 
-Offer.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        code: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            unique: true,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        stock: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-        amount: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false,
-        },
-        minPointsRequired: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        maxPointsRequired: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        productPicture: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        isActive: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-        },
-        allowsCancelExchange: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-        },
-        exchangeCompletedCount: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        companyId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'companies',
-                key: 'id',
-            },
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'Offer',
-        tableName: 'offers',
-        timestamps: true,
-    },
-);
+    // Relaciones entre entidades
+    public company?: Company;
+}
 
 export default Offer;

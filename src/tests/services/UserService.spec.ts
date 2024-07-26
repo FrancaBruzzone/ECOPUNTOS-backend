@@ -12,6 +12,8 @@ import { InvalidCredentialsError } from '../../exceptions/InvalidCredentialsErro
 import { NotFoundError } from '../../exceptions/NotFoundError';
 import UserSession from '../../data/models/UserSession';
 import { jest } from '@jest/globals';
+import Role from '../../data/models/Role';
+import { IRoleRepository } from '../../interfaces/IRoleRepository';
 
 jest.mock('jsonwebtoken', () => ({
     verify: jest.fn(),
@@ -28,6 +30,7 @@ describe('UserService', () => {
     let sequelize: Sequelize;
     let userService: UserService;
     let userRepository: jest.Mocked<IUserRepository>;
+    let roleRepository: jest.Mocked<IRoleRepository>;
     let userSessionRepository: jest.Mocked<IUserSessionRepository>;
 
     beforeAll(async () => {
@@ -41,6 +44,11 @@ describe('UserService', () => {
             create: jest.fn(),
         } as any;
 
+        roleRepository = {
+            findByName: jest.fn(),
+            create: jest.fn(),
+        } as any;
+
         userSessionRepository = {
             create: jest.fn(),
             findBySessionId: jest.fn(),
@@ -49,6 +57,7 @@ describe('UserService', () => {
 
         userService = new UserService(userRepository, userSessionRepository);
         await User.destroy({ where: {} });
+        await Role.destroy({ where: {} });
     });
 
     afterAll(async () => {
@@ -69,9 +78,12 @@ describe('UserService', () => {
                 isActive: true,
             };
             const userToCreate = User.build(userData);
+            const roleToCreate = Role.build({ name: 'USER' });
 
             userRepository.findByEmail.mockResolvedValue(null);
             userRepository.create.mockResolvedValue(userToCreate as any);
+            roleRepository.findByName.mockResolvedValue(roleToCreate);
+            roleRepository.create.mockResolvedValue(roleToCreate as any);
 
             // Act
             const newUser = await userService.create(userToCreate);

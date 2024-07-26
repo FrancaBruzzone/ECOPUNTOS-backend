@@ -1,44 +1,32 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import { Table, Column, Model, DataType } from 'sequelize-typescript';
 
+@Table({ tableName: 'companies', timestamps: true })
 class Company extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     public name!: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
     public profilePicture?: string;
+
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+    })
     public isActive!: boolean;
-
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
 }
-
-Company.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        profilePicture: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        isActive: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: true,
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'Company',
-        tableName: 'companies',
-        timestamps: true,
-    },
-);
 
 export default Company;
