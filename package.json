@@ -37,6 +37,7 @@
         "prettier": "^3.3.2",
         "reflect-metadata": "^0.2.2",
         "sequelize": "^6.37.3",
+        "sequelize-typescript": "^2.1.6",
         "tsyringe": "^4.8.0",
         "typescript": "^5.4.5",
         "uuid": "^10.0.0"
