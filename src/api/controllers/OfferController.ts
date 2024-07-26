@@ -22,24 +22,31 @@ class OfferController {
             maxPointsRequired,
             allowsCancelExchange,
         } = req.body;
-        const offerToCreate = Offer.build({
-            code,
-            name,
-            description,
-            stock,
-            amount,
-            minPointsRequired,
-            maxPointsRequired,
-            allowsCancelExchange,
-            userId: (req as ICustomRequest).userId,
-        });
 
-        const newOffer = await this.offerService.create(offerToCreate);
+        try {
+            const offerToCreate = Offer.build({
+                code,
+                name,
+                description,
+                stock,
+                amount,
+                minPointsRequired,
+                maxPointsRequired,
+                allowsCancelExchange,
+                userId: (req as ICustomRequest).userId,
+            });
 
-        res.status(201).json({
-            message: 'Oferta creada con éxito',
-            data: newOffer,
-        });
+            const newOffer = await this.offerService.create(offerToCreate);
+
+            res.status(201).json({
+                message: 'Oferta creada con éxito',
+                data: newOffer,
+            });
+        } catch {
+            res.status(400).json({
+                message: 'Faltan datos obligatorios',
+            });
+        }
     }
 
     public async get(req: Request, res: Response): Promise<void> {

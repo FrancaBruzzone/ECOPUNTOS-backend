@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { ICompanyService } from '../../interfaces/ICompanyService';
 import Company from '../../data/models/Company';
 import { extractLimitAndOffset } from '../../utils/extractLimitAndOffset';
+import { InvalidElementError } from '../../exceptions/InvalidElementError';
 
 class CompanyController {
     private companyService: ICompanyService;
@@ -12,16 +13,24 @@ class CompanyController {
 
     public async create(req: Request, res: Response): Promise<void> {
         const { name } = req.body;
-        const companyToCreate = Company.build({
-            name,
-        });
 
-        const newCompany = await this.companyService.create(companyToCreate);
+        try {
+            const companyToCreate = Company.build({
+                name,
+            });
 
-        res.status(201).json({
-            message: 'Empresa creada con éxito',
-            data: newCompany,
-        });
+            const newCompany =
+                await this.companyService.create(companyToCreate);
+
+            res.status(201).json({
+                message: 'Empresa creada con éxito',
+                data: newCompany,
+            });
+        } catch {
+            res.status(400).json({
+                message: 'Faltan datos obligatorios',
+            });
+        }
     }
 
     public async get(req: Request, res: Response): Promise<void> {
