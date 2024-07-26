@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ICustomRequest } from '../interfaces/ICustomRequest';
 import { Role } from '../data/models/enumerations/Role';
 
-export function checkRoles(requiredRoles: Role[]) {
+export function checkSameUserOrRoles(requiredRoles: Role[]) {
     return function (req: Request, res: Response, next: NextFunction) {
         const token = (req as ICustomRequest).token;
 
@@ -14,8 +14,10 @@ export function checkRoles(requiredRoles: Role[]) {
 
         try {
             const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-            const userRolesNames = decoded.userRolesNames || [];
 
+            if (decoded.userEmail === req.params.email) return next();
+
+            const userRolesNames = decoded.userRolesNames || [];
             const hasRequiredRole = requiredRoles.some((role) =>
                 userRolesNames.includes(role),
             );
