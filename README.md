@@ -13,16 +13,16 @@ DB_HOST=localhost
 DB_PORT=3306
 DB_USER=user
 DB_PASSWORD=password
-DB_DATABASE=dbName
+DB_DATABASE=database-name
 ```
 
-### 1.2. En la carpeta app ejecutar el siguiente comando:
+### 1.2. Ejecutar:
 
 ```
 npm run build
 ```
 
-### 1.3. En la carpeta app ejecutar el siguiente comando:
+### 1.3. Ejecutar:
 
 ```
 npm start
@@ -34,8 +34,8 @@ Se instala Prettier para tener todos los integrantes del equipo el mismo formato
 
 ## Como configurarlo:
 
-- [Guía de instalación](https://prettier.io/docs/en/install.html).
-- En Visual Studio Code:
+-   [Guía de instalación](https://prettier.io/docs/en/install.html).
+-   En Visual Studio Code:
 
 Paso 1: Descargar la extensión
 
