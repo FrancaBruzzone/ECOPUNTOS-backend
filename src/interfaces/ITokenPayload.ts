@@ -1,14 +1,11 @@
-import { Request } from 'express';
-
-export interface ICustomRequest extends Request {
+export interface ITokenPayload {
     userId: number;
     userEmail: string;
+    userSessionId: string;
     userRolesNames: string[];
     userPointsBalancesIds: number[];
     userExchangesIds: number[];
-    userSessionsIds: string[];
     userOffersIds: number[];
     userSustainabilityActivitiesIds: number[];
     userCompaniesIds: number[];
-    token: string;
 }

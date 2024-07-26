@@ -10,14 +10,10 @@ import { InvalidCredentialsError } from '../exceptions/InvalidCredentialsError';
 import { IUserSessionRepository } from '../interfaces/IUserSessionRepository';
 import { getSequelizeInstance } from '../data/config/sequelize';
 import { IRoleRepository } from '../interfaces/IRoleRepository';
+import { ITokenPayload } from '../interfaces/ITokenPayload';
+import { generateJwtToken } from '../utils/generateJwtToken';
 
 const roleUser = 'USER';
-
-interface TokenPayload {
-    id: number;
-    email: string;
-    sessionId: string;
-}
 
 @injectable()
 export class UserService implements IUserService {
@@ -72,37 +68,28 @@ export class UserService implements IUserService {
             throw new InvalidCredentialsError('Credenciales inválidas');
 
         const userSession = await this.userSessionRepository.create(user.id);
-
-        const token = this.generateJwtToken({
-            id: user.id,
-            email: user.email,
-            sessionId: userSession.sessionId,
-        });
+        const token = await generateJwtToken(user, userSession);
 
         return token;
     }
 
     public async logout(token: string): Promise<boolean> {
-        let payload: TokenPayload;
+        let payload: ITokenPayload;
         try {
             payload = jwt.verify(
                 token,
                 process.env.JWT_SECRET!,
-            ) as TokenPayload;
+            ) as ITokenPayload;
         } catch (error) {
             throw new InvalidCredentialsError('Token inválido');
         }
 
         const userSession = await this.userSessionRepository.findBySessionId(
-            payload.sessionId,
+            payload.userSessionId,
         );
         if (!userSession)
             throw new NotFoundError('Sesión de usuario no encontrada');
 
         return await this.userSessionRepository.delete(userSession);
-    }
-
-    private generateJwtToken(payload: TokenPayload): string {
-        return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
     }
 }
