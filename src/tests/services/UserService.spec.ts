@@ -39,13 +39,6 @@ describe('UserService', () => {
             create: jest.fn(),
         } as any;
 
-        jest.mock('../../data/models/Role', () => {
-            return {
-                findOne: jest.fn(),
-                create: jest.fn(),
-            };
-        });
-
         userSessionRepository = {
             create: jest.fn(),
             findBySessionId: jest.fn(),
