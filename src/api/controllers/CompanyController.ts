@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ICompanyService } from '../../interfaces/ICompanyService';
 import Company from '../../data/models/Company';
+import { extractLimitAndOffset } from '../../utils/extractLimitAndOffset';
 
 class CompanyController {
     private companyService: ICompanyService;
@@ -44,7 +45,9 @@ class CompanyController {
     }
 
     public async getAll(req: Request, res: Response): Promise<void> {
-        const companies = await this.companyService.getAll();
+        let filters = extractLimitAndOffset(req);
+
+        const companies = await this.companyService.getAll(filters);
 
         res.status(200).json({
             message: 'Lectura de empresas realizada con éxito',

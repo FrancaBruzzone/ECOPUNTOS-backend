@@ -4,6 +4,7 @@ import { NotFoundError } from '../exceptions/NotFoundError';
 import Company from '../data/models/Company';
 import { ICompanyService } from '../interfaces/ICompanyService';
 import { ICompanyRepository } from '../interfaces/ICompanyRepository';
+import { IPaginationResponse } from '../interfaces/IPaginationResponse';
 
 @injectable()
 export class CompanyService implements ICompanyService {
@@ -41,7 +42,17 @@ export class CompanyService implements ICompanyService {
         return await this.companyRepository.delete(id);
     }
 
-    public async getAll(): Promise<Company[]> {
-        return this.companyRepository.getAll();
+    public async getAll(filters: any): Promise<IPaginationResponse<Company>> {
+        const total = await this.companyRepository.getCount();
+        const companies = await this.companyRepository.getAll(filters);
+
+        return {
+            elements: companies,
+            pagination: {
+                total,
+                limit: filters.limit,
+                offset: filters.offset,
+            },
+        };
     }
 }
