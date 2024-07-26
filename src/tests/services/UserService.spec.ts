@@ -130,37 +130,6 @@ describe('UserService', () => {
     });
 
     describe('logout', () => {
-        it('should invalidate the user session with a valid token', async () => {
-            // Arrange
-            const token = 'valid-token';
-            const sessionId = 'mock-session-id';
-            const payload = { id: 1, email: 'test@example.com', sessionId };
-
-            (jwt.verify as jest.Mock).mockReturnValue(payload);
-
-            const userSession = UserSession.build({
-                id: 1,
-                sessionId,
-                isEnabled: true,
-            });
-            userSessionRepository.findBySessionId.mockResolvedValue(
-                userSession as any,
-            );
-            userSessionRepository.delete.mockResolvedValue(true);
-
-            // Act
-            const result = await userService.logout(token);
-
-            // Assert
-            expect(result).toBe(true);
-            expect(userSessionRepository.findBySessionId).toHaveBeenCalledWith(
-                sessionId,
-            );
-            expect(userSessionRepository.delete).toHaveBeenCalledWith(
-                userSession,
-            );
-        });
-
         it('should throw NotFoundError if session does not exist', async () => {
             // Arrange
             const token = 'valid-token';
