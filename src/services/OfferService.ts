@@ -17,7 +17,9 @@ export class OfferService implements IOfferService {
         const existingOffer = await this.offerRepository.findByCode(offer.code);
 
         if (existingOffer)
-            throw new ConflictError(`La oferta ${offer.name} ya existe`);
+            throw new ConflictError(
+                `La oferta con código ${offer.code} ya existe`,
+            );
 
         return await this.offerRepository.create(offer);
     }
