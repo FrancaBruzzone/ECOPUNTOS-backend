@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { ConflictError } from '../exceptions/ConflictError';
-import instance from 'tsyringe/dist/typings/dependency-container';
 import { NotFoundError } from '../exceptions/NotFoundError';
 
 function messageFormat(error: Error) {
