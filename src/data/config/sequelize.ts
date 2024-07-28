@@ -1,14 +1,28 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import dotenv from 'dotenv';
+import User from '../models/User';
+import PointsBalance from '../models/PointsBalance';
+import Exchange from '../models/Exchange';
+import Offer from '../models/Offer';
+import Company from '../models/Company';
+import Investment from '../models/Investment';
+import SustainabilityActivity from '../models/SustainabilityActivity';
+import UserSession from '../models/UserSession';
+import Setting from '../models/Setting';
+import Document from '../models/Document';
+import ActivityType from '../models/ActivityType';
+import Transport from '../models/Transport';
+import WasteManagement from '../models/WasteManagement';
+import UserCompany from '../models/UserCompany';
 
 dotenv.config();
 
 let sequelize: Sequelize | null = null;
 
-export const getSequelizeInstance = () => {
+export const getSequelizeInstance = (): Sequelize => {
     if (!sequelize) {
+        // Configuración para producción con MySQL
         if (process.env.NODE_ENV === 'production') {
-            // Configuración para producción con MySQL
             sequelize = new Sequelize({
                 dialect: 'mysql',
                 host: process.env.DB_HOST,
@@ -16,12 +30,45 @@ export const getSequelizeInstance = () => {
                 username: process.env.DB_USER,
                 password: process.env.DB_PASSWORD,
                 database: process.env.DB_DATABASE,
+                models: [
+                    User,
+                    PointsBalance,
+                    Exchange,
+                    Offer,
+                    Company,
+                    Investment,
+                    SustainabilityActivity,
+                    UserSession,
+                    Setting,
+                    Document,
+                    ActivityType,
+                    Transport,
+                    WasteManagement,
+                    UserCompany,
+                ],
+                logging: console.log,
             });
         } else {
             // Configuración para pruebas con SQLite en memoria
             sequelize = new Sequelize({
                 dialect: 'sqlite',
                 storage: ':memory:',
+                models: [
+                    User,
+                    PointsBalance,
+                    Exchange,
+                    Offer,
+                    Company,
+                    Investment,
+                    SustainabilityActivity,
+                    UserSession,
+                    Setting,
+                    Document,
+                    ActivityType,
+                    Transport,
+                    WasteManagement,
+                    UserCompany,
+                ],
                 logging: false,
             });
         }

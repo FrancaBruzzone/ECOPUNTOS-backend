@@ -1,20 +1,24 @@
-import { Attributes, WhereOptions } from 'sequelize';
+import { Attributes, Transaction, WhereOptions } from 'sequelize';
 import { injectable } from 'tsyringe';
 import User from '../models/User';
 import { IUserRepository } from '../../interfaces/IUserRepository';
 
 @injectable()
 export class UserRepository implements IUserRepository {
-    public async create(user: User): Promise<User> {
+    public async create(
+        user: User,
+        options: { transaction?: Transaction } = {},
+    ): Promise<User> {
         return await User.create({
             email: user.email,
             password: user.password,
+            roles: user.roles,
         });
     }
 
     public async findById(id: number): Promise<User | null> {
-        const entity = await User.findByPk(id);
-        return entity;
+        const user = await User.findByPk(id);
+        return user;
     }
 
     public async findByEmail(email: string): Promise<User | null> {
@@ -38,7 +42,7 @@ export class UserRepository implements IUserRepository {
     }
 
     public async getAll(): Promise<User[]> {
-        const entities = await User.findAll();
-        return entities;
+        const users = await User.findAll();
+        return users;
     }
 }

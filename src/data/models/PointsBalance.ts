@@ -1,58 +1,52 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    ForeignKey,
+    DataType,
+} from 'sequelize-typescript';
+import User from './User';
 import { FinancialOperations } from './enumerations/FinancialOperations';
 
+@Table({ tableName: 'pointsbalances', timestamps: true })
 class PointsBalance extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public initialBalance!: number;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public finalBalance!: number;
+
+    @Column({
+        type: DataType.ENUM(
+            FinancialOperations.Debit,
+            FinancialOperations.Credit,
+        ),
+        allowNull: false,
+    })
     public operation!: string;
 
-    // Relaciones entre entidades
+    @ForeignKey(() => User)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public userId!: number;
 
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+    // Relaciones entre entidades
+    public user?: User;
 }
-
-PointsBalance.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        initialBalance: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        finalBalance: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        operation: {
-            type: DataTypes.ENUM(
-                FinancialOperations.Debit,
-                FinancialOperations.Credit,
-            ),
-            allowNull: false,
-        },
-        userId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'users',
-                key: 'id',
-            },
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'PointsBalance',
-        tableName: 'pointsbalances',
-        timestamps: true,
-    },
-);
 
 export default PointsBalance;

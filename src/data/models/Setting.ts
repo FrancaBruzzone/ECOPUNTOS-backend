@@ -1,48 +1,39 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    ForeignKey,
+    DataType,
+} from 'sequelize-typescript';
+import User from './User';
 import { AvailableLanguage } from './enumerations/AvailableLanguage';
 
+@Table({ tableName: 'settings', timestamps: false })
 class Setting extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.ENUM(
+            AvailableLanguage.Spanish,
+            AvailableLanguage.English,
+        ),
+        allowNull: true,
+    })
     public language!: string;
 
-    // Relaciones entre entidades
+    @ForeignKey(() => User)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public userId!: number;
 
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+    public user?: User;
 }
-
-Setting.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        language: {
-            type: DataTypes.ENUM(
-                AvailableLanguage.Spanish,
-                AvailableLanguage.English,
-            ),
-            allowNull: true,
-        },
-        userId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'users',
-                key: 'id',
-            },
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'Setting',
-        tableName: 'settings',
-        timestamps: false,
-    },
-);
 
 export default Setting;

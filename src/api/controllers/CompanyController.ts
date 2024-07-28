@@ -19,7 +19,7 @@ class CompanyController {
 
         res.status(201).json({
             message: 'Empresa creada con éxito',
-            company: newCompany,
+            data: newCompany,
         });
     }
 
@@ -29,7 +29,7 @@ class CompanyController {
 
         res.status(200).json({
             message: 'Lectura de empresa realizada con éxito',
-            company: company,
+            data: company,
         });
     }
 
@@ -48,7 +48,7 @@ class CompanyController {
 
         res.status(200).json({
             message: 'Lectura de empresas realizada con éxito',
-            companies: companies,
+            data: companies,
         });
     }
 }

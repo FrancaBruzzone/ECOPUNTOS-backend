@@ -1,69 +1,65 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    ForeignKey,
+    DataType,
+} from 'sequelize-typescript';
+import Company from './Company';
 import { InvestmentType } from './enumerations/InvestmentType';
 
+@Table({ tableName: 'investments', timestamps: true })
 class Investment extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     public title!: string;
+
+    @Column({
+        type: DataType.DECIMAL(10, 2),
+        allowNull: false,
+    })
     public amount!: number;
+
+    @Column({
+        type: DataType.DATE,
+        allowNull: false,
+    })
     public doneAt!: Date;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     public description!: string;
+
+    @Column({
+        type: DataType.ENUM(
+            InvestmentType.BasicService,
+            InvestmentType.Courses,
+            InvestmentType.ProductPurchase,
+        ),
+        allowNull: false,
+    })
     public type!: string;
 
-    // Relaciones entre entidades
+    @ForeignKey(() => Company)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public companyId!: number;
 
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+    // Relaciones entre entidades
+    public company?: Company;
 }
-
-Investment.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        amount: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false,
-        },
-        doneAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        type: {
-            type: DataTypes.ENUM(
-                InvestmentType.BasicService,
-                InvestmentType.Courses,
-                InvestmentType.ProductPurchase,
-            ),
-            allowNull: false,
-        },
-        companyId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'companies',
-                key: 'id',
-            },
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'Investment',
-        tableName: 'investments',
-        timestamps: true,
-    },
-);
 
 export default Investment;

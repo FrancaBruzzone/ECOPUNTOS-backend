@@ -1,48 +1,43 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    DataType,
+    ForeignKey,
+} from 'sequelize-typescript';
 import { ClasificationWaste } from './enumerations/ClasificationWaste';
+import ActivityType from './ActivityType';
 
+@Table({ tableName: 'wastemanagements', timestamps: false })
 class WasteManagement extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
-    public activityTypeId!: number;
-    public weight!: number;
-    public clasification!: string;
-}
 
-WasteManagement.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        activityTypeId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            unique: true,
-            references: {
-                model: 'activityTypes',
-                key: 'id',
-            },
-        },
-        weight: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false,
-        },
-        clasification: {
-            type: DataTypes.ENUM(
-                ClasificationWaste.Paper,
-                ClasificationWaste.Plastic,
-            ),
-            allowNull: false,
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'WasteManagement',
-        tableName: 'wastemanagements',
-        timestamps: false,
-    },
-);
+    @ForeignKey(() => ActivityType)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
+    public activityTypeId!: number;
+
+    @Column({
+        type: DataType.DECIMAL(10, 2),
+        allowNull: false,
+    })
+    public weight!: number;
+
+    @Column({
+        type: DataType.ENUM(
+            ClasificationWaste.Paper,
+            ClasificationWaste.Plastic,
+        ),
+        allowNull: false,
+    })
+    public clasification!: ClasificationWaste;
+}
 
 export default WasteManagement;

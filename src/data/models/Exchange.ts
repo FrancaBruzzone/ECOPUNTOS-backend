@@ -1,69 +1,62 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    ForeignKey,
+    DataType,
+} from 'sequelize-typescript';
+import User from './User';
+import Offer from './Offer';
 import { ExchangeState } from './enumerations/ExchangeState';
 
+@Table({ tableName: 'exchanges', timestamps: true })
 class Exchange extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.ENUM(
+            ExchangeState.Pending,
+            ExchangeState.Cancelled,
+            ExchangeState.Completed,
+            ExchangeState.InProgress,
+        ),
+        allowNull: false,
+    })
     public state!: string;
+
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public pointsUsed!: number;
+
+    @Column({
+        type: DataType.DECIMAL(10, 2),
+        allowNull: false,
+    })
     public amountInCurrency!: number;
 
-    // Relaciones entre entidades
+    @ForeignKey(() => User)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public userId!: number;
+
+    @ForeignKey(() => Offer)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public offerId!: number;
 
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+    public user?: User;
+    public offer?: Offer;
 }
-
-Exchange.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        state: {
-            type: DataTypes.ENUM(
-                ExchangeState.Pending,
-                ExchangeState.Cancelled,
-                ExchangeState.Completed,
-                ExchangeState.InProgress,
-            ),
-            allowNull: false,
-        },
-        pointsUsed: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        amountInCurrency: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false,
-        },
-        userId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'users',
-                key: 'id',
-            },
-        },
-        offerId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'offers',
-                key: 'id',
-            },
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'Exchange',
-        tableName: 'exchanges',
-        timestamps: true,
-    },
-);
 
 export default Exchange;

@@ -1,49 +1,48 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    ForeignKey,
+    DataType,
+} from 'sequelize-typescript';
+import ActivityType from './ActivityType';
 import { TransportType } from './enumerations/TransportType';
 
+@Table({ tableName: 'transports', timestamps: false })
 class Transport extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
-    public activityTypeId!: number;
-    public distance!: number;
-    public type!: string;
-}
 
-Transport.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        activityTypeId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            unique: true,
-            references: {
-                model: 'activityTypes',
-                key: 'id',
-            },
-        },
-        distance: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false,
-        },
-        type: {
-            type: DataTypes.ENUM(
-                TransportType.Bicycle,
-                TransportType.PublicTransport,
-                TransportType.Walk,
-            ),
-            allowNull: false,
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'Transport',
-        tableName: 'transports',
-        timestamps: false,
-    },
-);
+    @ForeignKey(() => ActivityType)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+        unique: true,
+    })
+    public activityTypeId!: number;
+
+    @Column({
+        type: DataType.DECIMAL(10, 2),
+        allowNull: false,
+    })
+    public distance!: number;
+
+    @Column({
+        type: DataType.ENUM(
+            TransportType.Bicycle,
+            TransportType.PublicTransport,
+            TransportType.Walk,
+        ),
+        allowNull: false,
+    })
+    public type!: string;
+
+    // Relaciones entre entidades
+    public activityType?: ActivityType;
+}
 
 export default Transport;

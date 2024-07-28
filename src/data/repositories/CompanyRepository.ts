@@ -12,13 +12,13 @@ export class CompanyRepository implements ICompanyRepository {
     }
 
     public async findById(id: number): Promise<Company | null> {
-        const entity = await Company.findByPk(id);
-        return entity;
+        const company = await Company.findByPk(id);
+        return company;
     }
 
     public async findByName(name: string): Promise<Company | null> {
-        const role = await Company.findOne({ where: { name } });
-        return role;
+        const company = await Company.findOne({ where: { name } });
+        return company;
     }
 
     public async delete(id: number): Promise<boolean> {
@@ -30,7 +30,7 @@ export class CompanyRepository implements ICompanyRepository {
     }
 
     public async getAll(): Promise<Company[]> {
-        const entities = await Company.findAll();
-        return entities;
+        const companies = await Company.findAll();
+        return companies;
     }
 }

@@ -1,68 +1,62 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    ForeignKey,
+    DataType,
+} from 'sequelize-typescript';
 import { DocumentFormat } from './enumerations/DocumentFormat';
+import SustainabilityActivity from './SustainabilityActivity';
+import Investment from './Investment';
 
+@Table({ tableName: 'documents', timestamps: true })
 class Document extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     public name!: string;
+
+    @Column({
+        type: DataType.ENUM(
+            DocumentFormat.JPEG,
+            DocumentFormat.PDF,
+            DocumentFormat.PNG,
+        ),
+        allowNull: false,
+    })
     public format!: DocumentFormat;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
     public locationUrl!: string;
 
+    @ForeignKey(() => SustainabilityActivity)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: true,
+    })
+    public sustainabilityActivityId?: number;
+
+    @ForeignKey(() => Investment)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: true,
+    })
+    public investmentId?: number;
+
     // Relaciones entre entidades
-    public sustainabilityActivityId!: number;
-    public investmentId!: number;
-
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+    public sustainabilityActivity?: SustainabilityActivity;
+    public investment?: Investment;
 }
-
-Document.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        format: {
-            type: DataTypes.ENUM(
-                DocumentFormat.JPEG,
-                DocumentFormat.PDF,
-                DocumentFormat.PNG,
-            ),
-            allowNull: false,
-        },
-        locationUrl: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        sustainabilityActivityId: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: 'sustainabilityActivities',
-                key: 'id',
-            },
-        },
-        investmentId: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: 'investments',
-                key: 'id',
-            },
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'Document',
-        tableName: 'documents',
-        timestamps: true,
-    },
-);
 
 export default Document;

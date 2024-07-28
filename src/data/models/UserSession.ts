@@ -1,51 +1,44 @@
-import { Model, DataTypes } from 'sequelize';
-import { getSequelizeInstance } from '../config/sequelize';
+import {
+    Table,
+    Column,
+    Model,
+    ForeignKey,
+    DataType,
+} from 'sequelize-typescript';
+import User from './User';
 
+@Table({ tableName: 'usersessions', timestamps: false })
 class UserSession extends Model {
+    @Column({
+        type: DataType.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    })
     public id!: number;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+        unique: true,
+    })
     public sessionId!: string;
+
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+    })
     public isEnabled?: boolean;
 
-    // Relaciones entre entidades
+    @ForeignKey(() => User)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
     public userId!: number;
 
-    // Timestamps
-    public readonly createdAt!: Date;
-    public readonly updatedAt!: Date;
+    // Relaciones entre entidades
+    public user?: User;
 }
-
-UserSession.init(
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        sessionId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-        },
-        isEnabled: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: true,
-        },
-        userId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'users',
-                key: 'id',
-            },
-        },
-    },
-    {
-        sequelize: getSequelizeInstance(),
-        modelName: 'UserSession',
-        tableName: 'usersessions',
-        timestamps: false,
-    },
-);
 
 export default UserSession;
