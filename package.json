@@ -4,7 +4,7 @@
     "description": "Este repositorio contiene el código fuente del backend para el sistema ECOPUNTOS",
     "main": "dist/app.js",
     "scripts": {
-        "test": "jest",
+        "test": "set NODE_ENV=development && jest",
         "start": "node dist/app.js",
         "build": "tsc",
         "check-format": "prettier --check ."
@@ -45,6 +45,9 @@
         "@types/express": "^4.17.21",
         "@types/jest": "^29.5.12",
         "@types/jsonwebtoken": "^9.0.6",
-        "jest": "^29.7.0"
+        "jest": "^29.7.0",
+        "sequelize-cli": "^6.6.2",
+        "sqlite3": "^5.1.7",
+        "ts-jest": "^29.2.3"
     }
 }
