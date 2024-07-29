@@ -124,13 +124,16 @@ describe('CompanyService', () => {
         await Company.bulkCreate(companiesData);
 
         // Act
-        const companies = await companyService.getAll();
+        const response = await companyService.getAll({ limit: 10, offset: 0 });
 
         // Assert
-        expect(companies).toHaveLength(2);
-        companies.forEach((company, index) => {
+        expect(response.elements).toHaveLength(2);
+        response.elements.forEach((company, index) => {
             expect(company.name).toBe(companiesData[index].name);
             expect(company.isActive).toBe(companiesData[index].isActive);
         });
+        expect(response.pagination.total).toBe(2);
+        expect(response.pagination.limit).toBe(10);
+        expect(response.pagination.offset).toBe(0);
     });
 });

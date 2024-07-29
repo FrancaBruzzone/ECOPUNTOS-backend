@@ -29,8 +29,12 @@ export class CompanyRepository implements ICompanyRepository {
         return result > 0;
     }
 
-    public async getAll(): Promise<Company[]> {
-        const companies = await Company.findAll();
+    public async getAll(filters: any): Promise<Company[]> {
+        const companies = await Company.findAll(filters);
         return companies;
+    }
+
+    public async getCount(): Promise<number> {
+        return Company.count();
     }
 }
