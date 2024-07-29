@@ -7,8 +7,10 @@ import { MySqlConnection } from './MySqlConnection';
 import { IUserService } from '../../interfaces/IUserService';
 import userRoutes from '../../api/routes/UserRoutes';
 import companyRoutes from '../../api/routes/CompanyRoutes';
+import offerRoutes from '../../api/routes/OfferRoutes';
 import { errorHandler } from '../../middlewares/errorHandler';
 import { ICompanyService } from '../../interfaces/ICompanyService';
+import { IOfferService } from '../../interfaces/IOfferService';
 
 dotenv.config();
 
@@ -46,6 +48,10 @@ export const configureServer = async function () {
         container.resolve<ICompanyService>('ICompanyService');
     app.set('companyService', companyService);
     app.use('/api', companyRoutes);
+
+    const offerService = container.resolve<IOfferService>('IOfferService');
+    app.set('offerService', offerService);
+    app.use('/api', offerRoutes);
 
     app.use(errorHandler);
 
